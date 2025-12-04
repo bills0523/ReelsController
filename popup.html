@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Reels Controller</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&display=swap");
+
+      :root {
+        color-scheme: light;
+      }
+
+      body {
+        margin: 0;
+        min-width: 280px;
+        background: linear-gradient(135deg, #0f172a, #1e293b);
+        color: #e2e8f0;
+        font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        padding: 16px;
+      }
+
+      h1 {
+        margin: 0 0 8px;
+        font-size: 18px;
+        letter-spacing: -0.03em;
+      }
+
+      p {
+        margin: 0 0 12px;
+        color: #cbd5e1;
+        font-size: 14px;
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 12px;
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+      }
+
+      button {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: transform 120ms ease, box-shadow 120ms ease, opacity 120ms ease;
+      }
+
+      button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      #requestAccess {
+        background: linear-gradient(120deg, #22d3ee, #3b82f6);
+        color: #0b1020;
+        box-shadow: 0 8px 16px rgba(59, 130, 246, 0.35);
+        margin-bottom: 10px;
+      }
+
+      #toggleOverride {
+        background: linear-gradient(120deg, #a855f7, #6366f1);
+        color: #0f172a;
+        box-shadow: 0 8px 16px rgba(99, 102, 241, 0.35);
+      }
+
+      button:not(:disabled):hover {
+        transform: translateY(-1px);
+      }
+
+      #status {
+        margin-top: 10px;
+        font-size: 12px;
+        color: #94a3b8;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Reels Controller</h1>
+    <p>Give this extension permission to take over keyboard control on Instagram Reels.</p>
+
+    <div class="card">
+      <button id="requestAccess">Allow Instagram Reels control</button>
+      <button id="toggleOverride" disabled>Override shortcuts: Off</button>
+      <div id="status">Waiting for permission…</div>
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
