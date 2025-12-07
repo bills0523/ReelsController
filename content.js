@@ -4,6 +4,8 @@ const LONG_PRESS_MS = 200;
 let speedBoostActive = false;
 let rightArrowTimer = null;
 let rightArrowDownAt = null;
+let muteLockState = null; // null means not set; boolean once user toggles mute/unmute.
+let muteApplyPending = false;
 
 function isTypingTarget(target) {
   if (!target) return false;
@@ -85,8 +87,9 @@ function togglePlayPause(video) {
 
 function toggleMute(video) {
   if (!video) return;
-  video.muted = !video.muted;
-  showToast(video.muted ? "🔇 Muted" : "🔊 Unmuted");
+  const nextState = muteLockState === null ? !video.muted : !muteLockState;
+  muteLockState = nextState;
+  applyMuteLockToVideo(video, { silent: false });
 }
 
 function seek(video, deltaSeconds) {
@@ -99,6 +102,29 @@ function setSpeed(video, speed) {
   if (!video) return;
   video.playbackRate = speed;
   showToast(speed > 1 ? "⏩ 2x Speed" : "▶️ 1x Speed");
+}
+
+function applyMuteLockToVideo(video, { silent = true } = {}) {
+  if (muteLockState === null || !video) return;
+  if (video.muted === muteLockState) return;
+  video.muted = muteLockState;
+  if (!silent) {
+    showToast(muteLockState ? "🔇 Muted" : "🔊 Unmuted");
+  }
+}
+
+function applyMuteLockToActive(options = {}) {
+  const video = getActiveVideo();
+  applyMuteLockToVideo(video, options);
+}
+
+function scheduleMuteLockApply() {
+  if (muteLockState === null || muteApplyPending) return;
+  muteApplyPending = true;
+  requestAnimationFrame(() => {
+    muteApplyPending = false;
+    applyMuteLockToActive({ silent: true });
+  });
 }
 
 function handleKeyDown(event) {
@@ -118,6 +144,7 @@ function handleKeyDown(event) {
     event.preventDefault();
     event.stopPropagation();
     toggleMute(video);
+    scheduleMuteLockApply();
     return;
   }
 
@@ -174,3 +201,21 @@ function handleKeyUp(event) {
 // Capture phase so we intercept before Instagram React handlers.
 window.addEventListener("keydown", handleKeyDown, { capture: true });
 window.addEventListener("keyup", handleKeyUp, { capture: true });
+document.addEventListener("scroll", scheduleMuteLockApply, { passive: true });
+window.addEventListener("resize", scheduleMuteLockApply, { passive: true });
+
+const reelsObserver = new MutationObserver(scheduleMuteLockApply);
+if (document.body) {
+  reelsObserver.observe(document.body, { childList: true, subtree: true });
+} else {
+  window.addEventListener(
+    "DOMContentLoaded",
+    () => {
+      reelsObserver.observe(document.body, { childList: true, subtree: true });
+    },
+    { once: true }
+  );
+}
+
+// Apply mute lock on load if user toggled before navigating reels.
+applyMuteLockToActive({ silent: true });
