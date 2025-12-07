@@ -89,7 +89,7 @@ function toggleMute(video) {
   if (!video) return;
   const nextState = muteLockState === null ? !video.muted : !muteLockState;
   muteLockState = nextState;
-  applyMuteLockToVideo(video, { silent: false });
+  applyMuteLockToAllVideos({ silent: false });
 }
 
 function seek(video, deltaSeconds) {
@@ -113,6 +113,12 @@ function applyMuteLockToVideo(video, { silent = true } = {}) {
   }
 }
 
+function applyMuteLockToAllVideos(options = {}) {
+  if (muteLockState === null) return;
+  const videos = document.querySelectorAll("video");
+  videos.forEach((video) => applyMuteLockToVideo(video, options));
+}
+
 function applyMuteLockToActive(options = {}) {
   const video = getActiveVideo();
   applyMuteLockToVideo(video, options);
@@ -123,7 +129,7 @@ function scheduleMuteLockApply() {
   muteApplyPending = true;
   requestAnimationFrame(() => {
     muteApplyPending = false;
-    applyMuteLockToActive({ silent: true });
+    applyMuteLockToAllVideos({ silent: true });
   });
 }
 
