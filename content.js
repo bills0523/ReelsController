@@ -149,6 +149,9 @@ function handleKeyDown(event) {
   if (event.key === "m" || event.key === "M") {
     event.preventDefault();
     event.stopPropagation();
+    if (typeof event.stopImmediatePropagation === "function") {
+      event.stopImmediatePropagation();
+    }
     toggleMute(video);
     scheduleMuteLockApply();
     return;
