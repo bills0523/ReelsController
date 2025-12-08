@@ -1,98 +1,98 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Reels Controller</title>
-    <style>
-      @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&display=swap");
+<!doctype html> <!-- Declare HTML5 document type -->
+<html lang="en"> <!-- Set document language to English -->
+  <head> <!-- Head contains metadata and styles -->
+    <meta charset="UTF-8" /> <!-- Use UTF-8 character encoding -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" /> <!-- Ensure responsive scaling -->
+    <title>Reels Controller</title> <!-- Browser tab title -->
+    <style> /* Inline styles for the popup */
+      @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&display=swap"); /* Load Space Grotesk font */
 
       :root {
-        color-scheme: light;
+        color-scheme: light; /* Opt into light color scheme for form controls */
       }
 
       body {
-        margin: 0;
-        min-width: 280px;
-        background: linear-gradient(135deg, #0f172a, #1e293b);
-        color: #e2e8f0;
+        margin: 0; /* Remove default body margin */
+        min-width: 280px; /* Ensure popup has a minimum width */
+        background: linear-gradient(135deg, #0f172a, #1e293b); /* Apply gradient background */
+        color: #e2e8f0; /* Set default text color */
         font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI",
-          sans-serif;
-        padding: 16px;
+          sans-serif; /* Use custom font with system fallbacks */
+        padding: 16px; /* Add inner spacing */
       }
 
       h1 {
-        margin: 0 0 8px;
-        font-size: 18px;
-        letter-spacing: -0.03em;
+        margin: 0 0 8px; /* Remove top margin and add bottom spacing */
+        font-size: 18px; /* Set heading size */
+        letter-spacing: -0.03em; /* Slightly tighten letter spacing */
       }
 
       p {
-        margin: 0 0 12px;
-        color: #cbd5e1;
-        font-size: 14px;
+        margin: 0 0 12px; /* Space paragraph from following content */
+        color: #cbd5e1; /* Softer paragraph text color */
+        font-size: 14px; /* Paragraph font size */
       }
 
       .card {
-        background: rgba(255, 255, 255, 0.06);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 12px;
-        padding: 12px;
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+        background: rgba(255, 255, 255, 0.06); /* Semi-transparent card background */
+        border: 1px solid rgba(255, 255, 255, 0.08); /* Subtle border to define card */
+        border-radius: 12px; /* Round card corners */
+        padding: 12px; /* Inner spacing for card content */
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25); /* Drop shadow for depth */
       }
 
       button {
-        width: 100%;
-        padding: 12px;
-        border: none;
-        border-radius: 10px;
-        font-weight: 600;
-        font-size: 14px;
-        cursor: pointer;
-        transition: transform 120ms ease, box-shadow 120ms ease, opacity 120ms ease;
+        width: 100%; /* Buttons fill card width */
+        padding: 12px; /* Comfortable tap target size */
+        border: none; /* Remove default border */
+        border-radius: 10px; /* Round button corners */
+        font-weight: 600; /* Semi-bold text weight */
+        font-size: 14px; /* Button text size */
+        cursor: pointer; /* Show pointer cursor on hover */
+        transition: transform 120ms ease, box-shadow 120ms ease, opacity 120ms ease; /* Smooth hover interactions */
       }
 
       button:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-        transform: none;
-        box-shadow: none;
+        opacity: 0.6; /* Dim disabled buttons */
+        cursor: not-allowed; /* Show not-allowed cursor when disabled */
+        transform: none; /* Remove hover movement when disabled */
+        box-shadow: none; /* Remove hover shadow when disabled */
       }
 
       #requestAccess {
-        background: linear-gradient(120deg, #22d3ee, #3b82f6);
-        color: #0b1020;
-        box-shadow: 0 8px 16px rgba(59, 130, 246, 0.35);
-        margin-bottom: 10px;
+        background: linear-gradient(120deg, #22d3ee, #3b82f6); /* Cyan-blue gradient for permission button */
+        color: #0b1020; /* Dark text for contrast on bright background */
+        box-shadow: 0 8px 16px rgba(59, 130, 246, 0.35); /* Glow matching accent color */
+        margin-bottom: 10px; /* Space below to separate from next button */
       }
 
       #toggleOverride {
-        background: linear-gradient(120deg, #a855f7, #6366f1);
-        color: #0f172a;
-        box-shadow: 0 8px 16px rgba(99, 102, 241, 0.35);
+        background: linear-gradient(120deg, #a855f7, #6366f1); /* Purple-indigo gradient for toggle button */
+        color: #0f172a; /* Dark text for legibility */
+        box-shadow: 0 8px 16px rgba(99, 102, 241, 0.35); /* Matching shadow for depth */
       }
 
       button:not(:disabled):hover {
-        transform: translateY(-1px);
+        transform: translateY(-1px); /* Lift enabled buttons slightly on hover */
       }
 
       #status {
-        margin-top: 10px;
-        font-size: 12px;
-        color: #94a3b8;
+        margin-top: 10px; /* Space above status text */
+        font-size: 12px; /* Smaller status text size */
+        color: #94a3b8; /* Muted color for secondary text */
       }
     </style>
   </head>
-  <body>
-    <h1>Reels Controller</h1>
-    <p>Give this extension permission to take over keyboard control on Instagram Reels.</p>
+  <body> <!-- Body houses the popup UI -->
+    <h1>Reels Controller</h1> <!-- Popup heading -->
+    <p>Give this extension permission to take over keyboard control on Instagram Reels.</p> <!-- Brief description -->
 
-    <div class="card">
-      <button id="requestAccess">Allow Instagram Reels control</button>
-      <button id="toggleOverride" disabled>Override shortcuts: Off</button>
-      <div id="status">Waiting for permission…</div>
+    <div class="card"> <!-- Card container for controls -->
+      <button id="requestAccess">Allow Instagram Reels control</button> <!-- Button to request permission -->
+      <button id="toggleOverride" disabled>Override shortcuts: Off</button> <!-- Toggle to enable/disable override -->
+      <div id="status">Waiting for permission…</div> <!-- Status display area -->
     </div>
 
-    <script src="popup.js"></script>
+    <script src="popup.js"></script> <!-- Load popup logic -->
   </body>
 </html>
